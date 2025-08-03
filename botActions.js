@@ -1,7 +1,13 @@
-/** @type {(client: import('tmi.js').Client) => void} */
-export default function botActions(client) {
+import OBSWebSocket from 'obs-websocket-js';
+
+/**
+ * @param {import('tmi.js').Client} client
+ * @param {import('obs-websocket-js').OBSWebSocket} obs
+ */
+export default function botActions(client, obs) {
    
-    client.on('message', (channel, userstate, message, self) => {
-        console.log(`Message from ${userstate.username}: ${message}`);
-    });
+    obs.on('CurrentProgramSceneChanged', (data) => {
+        // console.log('Scene changed in OBS!');
+        client.say('#UnFuzed_', `Scene changed to ${data.sceneName}`);
+    });   
 }
