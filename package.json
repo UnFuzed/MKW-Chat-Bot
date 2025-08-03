@@ -11,6 +11,7 @@
   "author": "UnFuzed",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.1",
     "tmi.js": "^1.8.5"
   },
   "devDependencies": {
