@@ -10,7 +10,7 @@ const {
 
 const TOKEN_URL = 'https://id.twitch.tv/oauth2/token'
 
-export async function refreshToken(){
+export default async function refreshToken(){
   try {
     const res = await axios.post(TOKEN_URL, null, {
       params: {
