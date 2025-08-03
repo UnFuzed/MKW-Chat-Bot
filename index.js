@@ -1,19 +1,36 @@
-import 'dotenv/config';
-import tmi from 'tmi.js';
+import 'dotenv/config'
+import tmi from 'tmi.js'
+import { refreshToken } from './refreshToken.js'
 
-const config = {
+let client = null
+
+function createClient(token) {
+  return new tmi.Client({
     identity: {
-        username: process.env.TWITCH_BOT_USERNAME,
-        password: process.env.TWITCH_OAUTH_TOKEN
+      username: process.env.TWITCH_BOT_USERNAME,
+      password: `oauth:${token}`
     },
     channels: [process.env.TWITCH_CHANNEL]
+  })
 }
 
-const client = new tmi.Client(config);
+async function connectClient() {
+  try {
+    const token = process.env.TWITCH_OAUTH_TOKEN.replace(/^oauth:/, '')
+    client = createClient(token)
 
-client.on('message', (channel, tags, message, self) => {
+    await client.connect()
+    console.log('Connected!')
+  } catch (err) {
+    console.warn('Failed to connect:', err)
 
-    console.log(`${tags['display-name']}: ${message}`);
-});
+    const newToken = await refreshToken()
+    process.env.TWITCH_OAUTH_TOKEN = `oauth:${newToken}`
 
-client.connect().catch(console.error);
+    client = createClient(newToken)
+    await client.connect()
+    console.log('Reconnected after refreshing token!')
+  }
+}
+
+connectClient()
