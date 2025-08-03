@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "Twitch Chat bot for my MKW Streams",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "UnFuzed",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "tmi.js": "^1.8.5"
+  }
 }
